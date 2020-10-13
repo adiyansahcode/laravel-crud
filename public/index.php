@@ -9,7 +9,9 @@
 
 declare(strict_types=1);
 
+// phpcs:disable
 define('LARAVEL_START', microtime(true));
+// phpcs:enable
 
 /*
 |--------------------------------------------------------------------------

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         factory(Language::class, 10)->create();
         factory(Publisher::class, 100)->create();
         factory(Category::class, 100)->create();
-        factory(Book::class, 100)
+        factory(Book::class, 5)
             ->create()
             ->each(function ($book) {
 
