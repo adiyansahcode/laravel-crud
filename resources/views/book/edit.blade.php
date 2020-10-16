@@ -11,7 +11,7 @@
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">Book Settings</li>
                 <li class="breadcrumb-item">Book</li>
-                <li class="breadcrumb-item active">Form Create</li>
+                <li class="breadcrumb-item active">Form Edit</li>
             </ol>
         </div>
     </div>
@@ -27,8 +27,8 @@
                     {{
                         Form::open([
                             'url' => '#',
-                            'method' => 'post',
-                            'id' => 'form-create',
+                            'method' => 'put',
+                            'id' => 'form-edit',
                             'class' => 'form form-horizontal',
                             'files' => true,
                         ])
@@ -37,7 +37,7 @@
                             {{ Form::label('isbn', 'ISBN', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::text('isbn', null, [
+                                    Form::text('isbn', $book->isbn, [
                                         'class' => 'form-control',
                                         'placeholder' => 'ISBN',
                                     ])
@@ -49,7 +49,7 @@
                             {{ Form::label('title', 'Title', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::text('title', null, [
+                                    Form::text('title', $book->title, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Title',
                                     ])
@@ -62,7 +62,7 @@
                             <div class="col-9 col-sm-9">
                                 <div class="input-group">
                                     {{
-                                        Form::text('publicationDate', null, [
+                                        Form::text('publicationDate', $book->publication_date, [
                                             'class' => 'form-control',
                                             'placeholder' => 'Publication Date',
                                         ])
@@ -80,7 +80,7 @@
                             {{ Form::label('weight', 'Weight', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::number('weight', 0, [
+                                    Form::number('weight', $book->weight, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Weight',
                                         'step' => 1
@@ -93,7 +93,7 @@
                             {{ Form::label('wide', 'Wide', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::number('wide', 0, [
+                                    Form::number('wide', $book->wide, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Wide',
                                         'step' => 1
@@ -106,7 +106,7 @@
                             {{ Form::label('long', 'Long', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::number('long', 0, [
+                                    Form::number('long', $book->long, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Long',
                                         'step' => 1
@@ -119,7 +119,7 @@
                             {{ Form::label('page', 'Page', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::number('page', 0, [
+                                    Form::number('page', $book->page, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Page',
                                         'step' => 1
@@ -132,7 +132,7 @@
                             {{ Form::label('description', 'Description', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::textarea('description', null, [
+                                    Form::textarea('description', $book->description, [
                                         'class' => 'form-control',
                                         'placeholder' => 'Description',
                                         'rows' => 3
@@ -145,7 +145,7 @@
                             {{ Form::label('author', 'Author', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::select('author[]', [], null, [
+                                    Form::select('author[]', $authorOption, $authorSelected, [
                                         'id' => 'author',
                                         'class' => 'form-control select-author',
                                         'data-placeholder' => "Select Author",
@@ -160,7 +160,7 @@
                             {{ Form::label('publisher', 'Publisher', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::select('publisher', [], null, [
+                                    Form::select('publisher', [$book->publisher->id => $book->publisher->name], $book->publisher->id, [
                                         'class' => 'form-control select-publisher',
                                         'data-placeholder' => "Select Publisher",
                                         'style' => "width: 100%;"
@@ -173,7 +173,7 @@
                             {{ Form::label('language', 'Language', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::select('language', [], null, [
+                                    Form::select('language', [$book->language->id => $book->language->name], $book->language->id, [
                                         'class' => 'form-control select-language',
                                         'data-placeholder' => "Select Language",
                                         'style' => "width: 100%;"
@@ -186,7 +186,7 @@
                             {{ Form::label('category', 'Category', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
-                                    Form::select('category', [], null, [
+                                    Form::select('category', [$book->category->id => $book->category->name], $book->category->id, [
                                         'class' => 'form-control select-category',
                                         'data-placeholder' => "Select Category",
                                         'style' => "width: 100%;"
@@ -216,6 +216,13 @@
             </div>
             <!-- /.card -->
         </div>
+    </div>
+@stop
+
+@section('footer')
+    <strong>{{ config('app.name') }}
+    <div class="float-right d-none d-sm-block">
+        <a href="http://adiyansahcode.id/">adiyansahcode</a>
     </div>
 @stop
 
@@ -349,7 +356,7 @@ $(function() {
         }
     });
 
-    $('#form-create').on('submit', function(event){
+    $('#form-edit').on('submit', function(event){
         event.preventDefault();
         $.ajaxSetup({
             headers: {
@@ -374,8 +381,8 @@ $(function() {
             contentType: 'application/json',
 			data: dataAjax,
 			dataType: "json",
-			method: "POST",
-            url: "{{ route('book.store') }}",
+			method: "PUT",
+            url: "{{ route('book.update', $book->id) }}",
             beforeSend: function() {
                 $("button").attr("disabled",true);
             },

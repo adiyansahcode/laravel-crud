@@ -26,11 +26,11 @@
                         <span class="fs-it-btn-vertical-line"></span>
                         CREATE
                     </a>
-                    <a href="#" name="trash" id="trash" class="btn btn-danger fs-it-btn float-right">
+                    {{-- <a href="#" name="trash" id="trash" class="btn btn-danger fs-it-btn float-right">
                         <i class="far fa-trash-alt" aria-hidden="true"></i>
                         <span class="fs-it-btn-vertical-line"></span>
                         RECYCLE BIN
-                    </a>
+                    </a> --}}
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -64,6 +64,13 @@
             </div>
             <!-- /.card -->
         </div>
+    </div>
+@stop
+
+@section('footer')
+    <strong>{{ config('app.name') }}
+    <div class="float-right d-none d-sm-block">
+        <a href="http://adiyansahcode.id/">adiyansahcode</a>
     </div>
 @stop
 
@@ -114,7 +121,12 @@ $(function() {
         },
         autoWidth: false,
         columns: [
-            { name: 'DT_RowIndex', data: 'DT_RowIndex', orderable: false, searchable: false },
+            {
+                name: 'DT_RowIndex',
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
             {
                 name: 'created_at',
                 data: {
@@ -167,7 +179,7 @@ $(function() {
         responsive: true,
         searching: true,
         serverSide: true,
-        select: true
+        select: false
     });
 
     $('#search').keyup(function(e){
@@ -183,6 +195,7 @@ $(function() {
         $('thead tr th:first-child').focus();
         $( "#search" ).focus();
     });
+
 });
 </script>
 @stop

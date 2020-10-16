@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'AdminLTE')
+@section('title', 'Dashboard')
 
 @section('content_header')
     <div class="row mb-2">
@@ -26,5 +26,12 @@
                 </div>
             </div>
         </div>
+    </div>
+@stop
+
+@section('footer')
+    <strong>{{ config('app.name') }}
+    <div class="float-right d-none d-sm-block">
+        <a href="http://adiyansahcode.id/">adiyansahcode</a>
     </div>
 @stop

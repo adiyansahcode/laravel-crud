@@ -29,6 +29,8 @@ Route::resources([
     'book' => 'BookController',
 ]);
 
+Route::get('/book/{id}/images', 'BookController@images')->name('book.images')->where('id', '[0-9]+');
+Route::put('/book/{id}/images', 'BookController@imagesUpload')->name('book.images.upload')->where('id', '[0-9]+');
 Route::get('/book/author/select', 'BookController@authorSelectData')->name('author.select');
 Route::get('/book/publisher/select', 'BookController@publisherSelectData')->name('publisher.select');
 Route::get('/book/language/select', 'BookController@languageSelectData')->name('language.select');
