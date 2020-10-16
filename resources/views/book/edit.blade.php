@@ -26,7 +26,7 @@
                     <!-- form start -->
                     {{
                         Form::open([
-                            'url' => '#',
+                            'route' => array('book.update', $book->id),
                             'method' => 'put',
                             'id' => 'form-edit',
                             'class' => 'form form-horizontal',
@@ -142,7 +142,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            {{ Form::label('author', 'Author', ['class' => 'col-3 col-sm-2 col-form-label']) }}
+                            {{ Form::label('author[]', 'Author', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
                                     Form::select('author[]', $authorOption, $authorSelected, [
@@ -363,26 +363,16 @@ $(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
         var formData = new FormData(this);
-        var object = {};
-        formData.forEach((value, key) => {
-            key = key.replace('[]', '');
-            if(!Reflect.has(object, key)){
-                object[key] = value;
-                return;
-            }
-            if(!Array.isArray(object[key])){
-                object[key] = [object[key]];
-            }
-            object[key].push(value);
-        });
-        var dataAjax = JSON.stringify(object);
+        var formURL = $(this).attr("action");
+
 		$.ajax({
-            contentType: 'application/json',
-			data: dataAjax,
-			dataType: "json",
-			method: "PUT",
-            url: "{{ route('book.update', $book->id) }}",
+            url: formURL,
+			method: "POST",
+			data: formData,
+            contentType: false,
+            processData: false,
             beforeSend: function() {
                 $("button").attr("disabled",true);
             },
@@ -391,23 +381,6 @@ $(function() {
             },
 			success:function(data) {
                 $("button").attr("disabled",false);
-
-				if(!$.isEmptyObject(data.errors)) {
-                    $('.alert').hide();
-                    $.each(data.errors, function( index, value ) {
-                        var html = '';
-                        html += '<div class="alert alert-danger" role="alert">';
-                        html += '<span>' + value + '</span>';
-                        html += '</div>';
-                        $('#'+index+'Error').html(html);
-                    });
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error Validation',
-                        text: 'Please check your input',
-                    });
-                }
-
                 if (data.success) {
                     Swal.fire({
                         icon: 'success',
@@ -417,6 +390,23 @@ $(function() {
                         window.location.href = "{{ route('book.index') }}";
                     })
 				}
+            },
+            error: function(jqXhr, json, errorThrown){
+                $("button").attr("disabled",false);
+                var data = jqXhr.responseJSON;
+                $('.alert').hide();
+                $.each(data.errors, function( index, value ) {
+                    var html = '';
+                    html += '<div class="alert alert-danger" role="alert">';
+                    html += '<span>' + value + '</span>';
+                    html += '</div>';
+                    $('#'+index+'Error').html(html);
+                });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error Validation',
+                    text: 'Please check your input',
+                });
             }
 		});
 	});

@@ -142,7 +142,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            {{ Form::label('author', 'Author', ['class' => 'col-3 col-sm-2 col-form-label']) }}
+                            {{ Form::label('author[]', 'Author', ['class' => 'col-3 col-sm-2 col-form-label']) }}
                             <div class="col-9 col-sm-9">
                                 {{
                                     Form::select('author[]', [], null, [
@@ -200,6 +200,7 @@
                             <div class="col-9 col-sm-9">
                                 {{
                                     Form::file('image[]', [
+                                        'id' => 'image',
                                         'class' => 'form-control',
                                         'data-placeholder' => "Upload Image",
                                         'multiple' => 'multiple'
@@ -377,22 +378,6 @@ $(function() {
             }
         });
 
-        // // formData to JSON
-        // var formData = new FormData(this);
-        // var object = {};
-        // formData.forEach((value, key) => {
-        //     key = key.replace('[]', '');
-        //     if(!Reflect.has(object, key)){
-        //         object[key] = value;
-        //         return;
-        //     }
-        //     if(!Array.isArray(object[key])){
-        //         object[key] = [object[key]];
-        //     }
-        //     object[key].push(value);
-        // });
-        // var dataAjax = JSON.stringify(object);
-
         var formData = new FormData(this);
         var formURL = $(this).attr("action");
 
@@ -402,7 +387,6 @@ $(function() {
 			data: formData,
             contentType: false,
             processData: false,
-			dataType: "json",
             beforeSend: function() {
                 $("button").attr("disabled",true);
             },
@@ -411,23 +395,6 @@ $(function() {
             },
 			success:function(data) {
                 $("button").attr("disabled",false);
-
-				if(!$.isEmptyObject(data.errors)) {
-                    $('.alert').hide();
-                    $.each(data.errors, function( index, value ) {
-                        var html = '';
-                        html += '<div class="alert alert-danger" role="alert">';
-                        html += '<span>' + value + '</span>';
-                        html += '</div>';
-                        $('#'+index+'Error').html(html);
-                    });
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error Validation',
-                        text: 'Please check your input',
-                    });
-                }
-
                 if (data.success) {
                     Swal.fire({
                         icon: 'success',
@@ -437,6 +404,23 @@ $(function() {
                         window.location.href = "{{ route('book.index') }}";
                     })
 				}
+            },
+            error: function(jqXhr, json, errorThrown){
+                $("button").attr("disabled",false);
+                var data = jqXhr.responseJSON;
+                $('.alert').hide();
+                $.each(data.errors, function( index, value ) {
+                    var html = '';
+                    html += '<div class="alert alert-danger" role="alert">';
+                    html += '<span>' + value + '</span>';
+                    html += '</div>';
+                    $('#'+index+'Error').html(html);
+                });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error Validation',
+                    text: 'Please check your input',
+                });
             }
 		});
 	});

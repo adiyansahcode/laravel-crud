@@ -26,11 +26,6 @@
                         <span class="fs-it-btn-vertical-line"></span>
                         CREATE
                     </a>
-                    {{-- <a href="#" name="trash" id="trash" class="btn btn-danger fs-it-btn float-right">
-                        <i class="far fa-trash-alt" aria-hidden="true"></i>
-                        <span class="fs-it-btn-vertical-line"></span>
-                        RECYCLE BIN
-                    </a> --}}
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
@@ -79,6 +74,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/datatables-plugins/responsive/css/responsive.bootstrap4.min.css') }}" {{ Sri::html('vendor/datatables-plugins/responsive/css/responsive.bootstrap4.min.css') }} >
 <link rel="stylesheet" href="{{ asset('vendor/datatables-plugins/fixedheader/css/fixedHeader.bootstrap4.min.css') }}" {{ Sri::html('vendor/datatables-plugins/fixedheader/css/fixedHeader.bootstrap4.min.css') }} >
 <link rel="stylesheet" href="{{ asset('vendor/datatables-plugins/select/css/select.bootstrap4.min.css') }}" {{ Sri::html('vendor/datatables-plugins/select/css/select.bootstrap4.min.css') }} >
+<link rel="stylesheet" href="{{ asset('vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}" {{ Sri::html('vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }} >
 <style>
     .dropdown-toggle::after {
         display: none;
@@ -111,6 +107,7 @@
 <script src="{{ asset('vendor/datatables-plugins/fixedheader/js/fixedHeader.bootstrap4.min.js') }}" {{ Sri::html('vendor/datatables-plugins/fixedheader/js/fixedHeader.bootstrap4.min.js') }} ></script>
 <script src="{{ asset('vendor/datatables-plugins/select/js/dataTables.select.min.js') }}" {{ Sri::html('vendor/datatables-plugins/select/js/dataTables.select.min.js') }} ></script>
 <script src="{{ asset('vendor/datatables-plugins/select/js/select.bootstrap4.min.js') }}" {{ Sri::html('vendor/datatables-plugins/select/js/select.bootstrap4.min.js') }} ></script>
+<script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}" {{ Sri::html('vendor/sweetalert2/sweetalert2.min.js') }} ></script>
 <script>
 $(function() {
     $.fn.DataTable.ext.pager.numbers_length = 5;
@@ -194,6 +191,41 @@ $(function() {
         }, 'fast');
         $('thead tr th:first-child').focus();
         $( "#search" ).focus();
+    });
+
+    table.on('click', '.delete-btn[data-id]', function (e) {
+        e.preventDefault();
+        var id = $(this).attr('id');
+        Swal.fire({
+            title: 'Are you sure ?',
+            icon: 'warning',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.dismiss !== Swal.DismissReason.cancel) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "book/" + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    data: {method: '_DELETE', submit: true}
+                }).always(function (data) {
+                    table.draw(false);
+                });
+
+                Swal.fire(
+                    'Deleted!',
+                    'Your data has been deleted.',
+                    'success'
+                )
+            }
+        })
     });
 
 });

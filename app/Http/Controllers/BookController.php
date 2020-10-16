@@ -13,6 +13,8 @@ use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Http\Requests\BookStoreRequest;
+use App\Http\Requests\BookUpdateRequest;
 use Image;
 
 class BookController extends Controller
@@ -63,10 +65,10 @@ class BookController extends Controller
                     $button .= '<a href="' . route('book.show', $data->id) . '" class="dropdown-item" type="button" name="view" id="' . $data->id . '"> <i class="far fa-clipboard m-1"></i> VIEW </a>';
                     $button .= '<div class="dropdown-divider"></div>';
                     $button .= '<a href="' . route('book.edit', $data->id) . '" class="dropdown-item" type="button" name="edit" id="' . $data->id . '"> <i class="far fa-edit m-1"></i> EDIT </a>';
+                    // $button .= '<div class="dropdown-divider"></div>';
+                    // $button .= '<a href="' . route('book.images', $data->id) . '" class="dropdown-item" type="button" name="images" id="' . $data->id . '"> <i class="far fa-images m-1"></i> IMAGES </a>';
                     $button .= '<div class="dropdown-divider"></div>';
-                    $button .= '<a href="' . route('book.images', $data->id) . '" class="dropdown-item" type="button" name="images" id="' . $data->id . '"> <i class="far fa-images m-1"></i> IMAGES </a>';
-                    $button .= '<div class="dropdown-divider"></div>';
-                    $button .= '<a href="' . route('book.destroy', $data->id) . '" class="dropdown-item" type="button" name="delete" id="' . $data->id . '"> <i class="far fa-trash-alt m-1"></i> DELETE </a>';
+                    $button .= '<button class="dropdown-item delete-btn" type="button" name="delete" data-id="' . $data->id . '" id="' . $data->id . '"> <i class="far fa-trash-alt m-1"></i> DELETE </button>';
                     $button .= '</div>';
                     $button .= '</div>';
 
@@ -152,34 +154,15 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\BookStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookStoreRequest $request)
     {
         if ($request->ajax()) {
-            $validator = \Validator::make($request->all(), [
-                'isbn' => ['required', 'numeric'],
-                'title' => ['required'],
-                'publicationDate' => ['required'],
-                'weight' => ['required'],
-                'wide' => ['required'],
-                'long' => ['required'],
-                'page' => ['required'],
-                'description' => ['required'],
-                'author' => ['required'],
-                'publisher' => ['required'],
-                'language' => ['required'],
-                'category' => ['required'],
-                'image' => ['required'],
-                'image.*' => ['image'],
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()]);
-            }
+            $validated = $request->validated();
 
             $book = new Book();
-
             $book->isbn = $request->isbn;
             $book->title = $request->title;
             $book->publication_date = $request->publicationDate;
@@ -236,7 +219,7 @@ class BookController extends Controller
                 $book->BookImg()->saveMany($bookImg);
             }
 
-            return response()->json(['success' => 'save successful']);
+            return response()->json(['success' => 'save success']);
         }
     }
 
@@ -248,17 +231,6 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        // $img = Book::find($book->id)->bookImg;
-
-        // var_dump($book->bookImg->first());
-        // var_dump($book->publisher);
-        // $author = [];
-        // $authorDb = $book->author;
-        // if (is_array($authorDb) || is_object($authorDb)) {
-        //     foreach ($authorDb as $authorKey => $authorValue) {
-        //         $author[$authorValue->id] = $authorValue->name;
-        //     }
-        // }
         return view('book.show', [
             'book' => $book,
         ]);
@@ -292,30 +264,14 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\BookUpdateRequest  $request
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
+    public function update(BookUpdateRequest $request, Book $book)
     {
         if ($request->ajax()) {
-            $validator = \Validator::make($request->all(), [
-                'isbn' => ['required', 'numeric'],
-                'title' => ['required'],
-                'publicationDate' => ['required'],
-                'weight' => ['required'],
-                'wide' => ['required'],
-                'long' => ['required'],
-                'page' => ['required'],
-                'description' => ['required'],
-                'author' => ['required'],
-                'publisher' => ['required'],
-                'language' => ['required'],
-                'category' => ['required'],
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()]);
-            }
+            $validated = $request->validated();
 
             $book->isbn = $request->isbn;
             $book->title = $request->title;
@@ -346,7 +302,7 @@ class BookController extends Controller
                 ]);
             }
 
-            return response()->json(['success' => 'save successful']);
+            return response()->json(['success' => 'update success']);
         }
     }
 
@@ -379,5 +335,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        $book->delete();
+        return response()->json(['success' => 'delete success']);
     }
 }
