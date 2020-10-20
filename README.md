@@ -33,7 +33,7 @@ php artisan migrate:refresh --seed
 php artisan serve --port=8080
 ```
 
-* done, just try run your project in browser
+* done, just try run your project in browser to http://localhost:8080
 
 ## Task List
 
