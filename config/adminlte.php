@@ -231,8 +231,37 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/#611-menu
     |
     */
-
-    'menu' => [],
+    'menu' => [
+        [
+            'text' => 'Dashboard',
+            'route'  => 'home',
+            'icon' => 'fas fa-fw fa-tachometer-alt',
+            'active' => ['home', 'home/*']
+        ],
+        [
+            'text'    => 'Book Setting',
+            'icon'    => 'fas fa-fw fa-book',
+            'submenu' => [
+                [
+                    'text' => 'Book',
+                    'route'  => 'book.index',
+                    'active' => ['book', 'book/*']
+                ],
+                [
+                    'text' => 'Category',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Author',
+                    'url'  => '#',
+                ],
+                [
+                    'text' => 'Publisher',
+                    'url'  => '#',
+                ],
+            ],
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
