@@ -28,6 +28,11 @@ composer install
 php artisan migrate:refresh --seed
 ```
 
+* run server
+```
+php artisan serve --port=8080
+```
+
 * done, just try run your project in browser
 
 ## Task List

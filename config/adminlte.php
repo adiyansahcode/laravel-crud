@@ -234,7 +234,7 @@ return [
     'menu' => [
         [
             'text' => 'Dashboard',
-            'route'  => 'home',
+            'route'  => 'home.index',
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'active' => ['home', 'home/*']
         ],

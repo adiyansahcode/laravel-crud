@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
-Route::redirect('/', 'home');
+Route::get('/home', 'HomeController@index')->name('home.index');
+Route::redirect('/', '/home');
 
 Route::resources([
     'book' => 'BookController',
