@@ -19,11 +19,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // Create language
+        // factory(Language::class, 10)->create();
+        $languageDb = new Language();
+        $languageDb->name = 'English';
+        $languageDb->description = 'english';
+        $languageDb->icon = 'us';
+        $languageDb->save();
+
+        $languageDb = new Language();
+        $languageDb->name = 'Indonesia';
+        $languageDb->description = 'indonesia';
+        $languageDb->icon = 'id';
+        $languageDb->save();
+
+
+        // Create random author
         factory(Author::class, 100)->create();
-        factory(Language::class, 10)->create();
+
+        // Create random publisher
         factory(Publisher::class, 100)->create();
+
+        // Create random category
         factory(Category::class, 100)->create();
-        factory(Book::class, 5)
+
+        // Create random book
+        factory(Book::class, 100)
             ->create()
             ->each(function ($book) {
 
@@ -41,8 +62,8 @@ class DatabaseSeeder extends Seeder
                 $author->random(rand(1, 3))->pluck('id')->toArray()
             );
 
-            $bookImg = factory(BookImg::class, 2)->create();
-            $book->BookImg()->saveMany($bookImg);
+            // $bookImg = factory(BookImg::class, 1)->create();
+            // $book->BookImg()->saveMany($bookImg);
 
             $book->save();
         });

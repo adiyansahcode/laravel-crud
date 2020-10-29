@@ -9,7 +9,7 @@ use Faker\Generator as Faker;
 
 $factory->define(BookImg::class, function (Faker $faker) {
     return [
-        'name' => $faker->image('public/storage/images',500,500, null, false),
+        'name' => $faker->image('public/storage/images',640,480, null, false),
         'description' => $faker->text,
     ];
 });

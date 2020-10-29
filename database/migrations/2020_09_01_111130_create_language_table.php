@@ -19,6 +19,7 @@ class CreateLanguageTable extends Migration
             $table->softDeletes();
             $table->string('name', 100)->nullable();
             $table->text('description')->nullable();
+            $table->string('icon', 50)->nullable();
         });
     }
 
