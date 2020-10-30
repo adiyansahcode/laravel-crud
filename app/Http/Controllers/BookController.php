@@ -12,10 +12,10 @@ use App\Models\Language;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Http\Requests\BookStoreRequest;
 use App\Http\Requests\BookUpdateRequest;
-use Image;
 
 class BookController extends Controller
 {
@@ -65,8 +65,6 @@ class BookController extends Controller
                     $button .= '<a href="' . route('book.show', $data->id) . '" class="dropdown-item" type="button" name="view" id="' . $data->id . '"> <i class="far fa-clipboard m-1"></i> VIEW </a>';
                     $button .= '<div class="dropdown-divider"></div>';
                     $button .= '<a href="' . route('book.edit', $data->id) . '" class="dropdown-item" type="button" name="edit" id="' . $data->id . '"> <i class="far fa-edit m-1"></i> EDIT </a>';
-                    // $button .= '<div class="dropdown-divider"></div>';
-                    // $button .= '<a href="' . route('book.images', $data->id) . '" class="dropdown-item" type="button" name="images" id="' . $data->id . '"> <i class="far fa-images m-1"></i> IMAGES </a>';
                     $button .= '<div class="dropdown-divider"></div>';
                     $button .= '<button class="dropdown-item delete-btn" type="button" name="delete" data-id="' . $data->id . '" id="' . $data->id . '"> <i class="far fa-trash-alt m-1"></i> DELETE </button>';
                     $button .= '</div>';
@@ -201,17 +199,10 @@ class BookController extends Controller
                         $path = $file->path();
                         $extension = $file->extension();
                         $nameFile = md5($name . time()) . '.' . $extension;
+                        $file->storeAs('public/images', $nameFile);
 
-                        $image = Image::make($file);
-                        $uploadImage = $image->save('public/storage/images/' . $nameFile);
-
-                        $thumbnail = $image->resize(200, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                        $uploadThumbnail = $thumbnail->save('public/storage/images/thumbnail/' . $nameFile);
-
-                        $bookImg[] =  new BookImg([
-                            'name' =>  $nameFile,
+                        $bookImg[] = new BookImg([
+                            'name' => $nameFile,
                             'description' => $nameFile,
                         ]);
                     }
@@ -302,29 +293,41 @@ class BookController extends Controller
                 ]);
             }
 
+            // if upload has file
+            if ($request->hasFile('image')) {
+                // get all images and delete
+                $imagesDb = $book->bookImg;
+                if (is_array($imagesDb) || is_object($imagesDb)) {
+                    foreach ($imagesDb as $imagesData) {
+                        $imagesDataName = $imagesData->name;
+                        if (Storage::disk('public')->exists('images/' . $imagesDataName)) {
+                            Storage::disk('public')->delete('images/' . $imagesDataName);
+                            $imagesData->delete();
+                        }
+                    }
+                }
+                // upload new image
+                $bookImg = [];
+                foreach ($request->file('image') as $file) {
+                    if ($file->isValid()) {
+                        $name = $file->getClientOriginalName();
+                        $type = $file->getClientMimeType();
+                        $path = $file->path();
+                        $extension = $file->extension();
+                        $nameFile = md5($name . time()) . '.' . $extension;
+                        $file->storeAs('public/images', $nameFile);
+
+                        $bookImg[] = new BookImg([
+                            'name' => $nameFile,
+                            'description' => $nameFile,
+                        ]);
+                    }
+                }
+                $book->BookImg()->saveMany($bookImg);
+            }
+
             return response()->json(['success' => 'update success']);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function images(Book $book)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function imagesUpload(Request $request, Book $book)
-    {
     }
 
     /**
@@ -335,7 +338,21 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        // get all images and delete
+        $imagesDb = $book->bookImg;
+        if (is_array($imagesDb) || is_object($imagesDb)) {
+            foreach ($imagesDb as $imagesData) {
+                $imagesDataName = $imagesData->name;
+                if (Storage::disk('public')->exists('images/' . $imagesDataName)) {
+                    Storage::disk('public')->delete('images/' . $imagesDataName);
+                    $imagesData->delete();
+                }
+            }
+        }
+
+        // delete book
         $book->delete();
+
         return response()->json(['success' => 'delete success']);
     }
 }

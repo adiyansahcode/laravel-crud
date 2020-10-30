@@ -15,7 +15,7 @@ class AddForeignKeysToBookAuthorTable extends Migration
     {
         Schema::table('book_author', function (Blueprint $table) {
             $table->foreign('author_id', 'author_id_fk1')->references('id')->on('author')->onUpdate('CASCADE')->onDelete('RESTRICT');
-            $table->foreign('book_id', 'book_id_fk1')->references('id')->on('book')->onUpdate('CASCADE')->onDelete('RESTRICT');
+            $table->foreign('book_id', 'book_id_fk1')->references('id')->on('book')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

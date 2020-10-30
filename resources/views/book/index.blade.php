@@ -214,16 +214,23 @@ $(function() {
                     url: "book/" + id,
                     type: 'DELETE',
                     dataType: 'json',
-                    data: {method: '_DELETE', submit: true}
-                }).always(function (data) {
-                    table.draw(false);
+                    data: {method: '_DELETE', submit: true},
+                    success:function(data) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        )
+                        table.draw(false);
+                    },
+                    error: function(jqXhr, json, errorThrown){
+                        Swal.fire(
+                            'Failed!',
+                            'Your data failed to delete.',
+                            'error'
+                        )
+                    }
                 });
-
-                Swal.fire(
-                    'Deleted!',
-                    'Your data has been deleted.',
-                    'success'
-                )
             }
         })
     });

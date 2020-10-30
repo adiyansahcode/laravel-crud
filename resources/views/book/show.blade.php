@@ -27,7 +27,7 @@
                             <h3 class="d-inline-block d-sm-none">LOWA Men’s Renegade GTX Mid Hiking Boots Review</h3>
                             <div class="col-12">
                                 @if($book->bookImg->first() !== null)
-                                    <img src="{{ asset('public/storage/images/' . $book->bookImg->first()->name) }}" class="product-image" alt="{{ $book->bookImg->first()->description }}">
+                                    <img src="{{ asset('storage/images/' . $book->bookImg->first()->name) }}" class="product-image" alt="{{ $book->bookImg->first()->description }}">
                                 @else
                                     <img src="https://via.placeholder.com/500" class="product-image" alt="image">
                                 @endif
@@ -35,7 +35,7 @@
                             <div class="col-12 product-image-thumbs">
                                 @forelse($book->bookImg as $img)
                                     <div class="product-image-thumb" >
-                                        <img src="{{ asset('public/storage/images/' . $img->name) }}" alt="{{ $img->description }}">
+                                        <img src="{{ asset('storage/images/' . $img->name) }}" alt="{{ $img->description }}">
                                     </div>
                                 @empty
                                     <div class="product-image-thumb" >

@@ -14,7 +14,7 @@ class AddForeignKeysToBookImgTable extends Migration
     public function up()
     {
         Schema::table('book_img', function (Blueprint $table) {
-            $table->foreign('book_id', 'book_id_fk2')->references('id')->on('book')->onUpdate('CASCADE')->onDelete('RESTRICT');
+            $table->foreign('book_id', 'book_id_fk2')->references('id')->on('book')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

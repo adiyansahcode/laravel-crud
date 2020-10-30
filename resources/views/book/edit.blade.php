@@ -26,7 +26,7 @@
                     <!-- form start -->
                     {{
                         Form::open([
-                            'route' => array('book.update', $book->id),
+                            'route' => ['book.update', $book->id],
                             'method' => 'put',
                             'id' => 'form-edit',
                             'class' => 'form form-horizontal',
@@ -196,6 +196,23 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            {{ Form::label('image[]', 'Images', ['class' => 'col-3 col-sm-2 col-form-label']) }}
+                            <div class="col-9 col-sm-9">
+                                <div class="custom-file">
+                                    {{
+                                        Form::file('image[]', [
+                                            'id' => 'image',
+                                            'class' => 'custom-file-input',
+                                            'data-placeholder' => "Upload Image",
+                                            'multiple' => 'multiple'
+                                        ])
+                                    }}
+                                    {{ Form::label('image[]', 'Choose image', ['class' => 'custom-file-label']) }}
+                                </div>
+                                <div id="imageError"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <div class="offset-3 offset-sm-2 col-9 col-sm-9">
                                 {{
                                     Form::button('<i class="fas fa-check m-1"></i> <span>Save</span>', [
@@ -250,8 +267,11 @@ input[type=number] {
 <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}" {{ Sri::html('vendor/daterangepicker/daterangepicker.js') }} ></script>
 <script src="{{ asset('vendor/select2/js/select2.min.js') }}" {{ Sri::html('vendor/select2/js/select2.min.js') }} ></script>
 <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}" {{ Sri::html('vendor/sweetalert2/sweetalert2.min.js') }} ></script>
+<script src="{{ asset('vendor/bs-custom-file-input/bs-custom-file-input.min.js') }}" {{ Sri::html('vendor/bs-custom-file-input/bs-custom-file-input.min.js') }} ></script>
 <script>
 $(function() {
+    bsCustomFileInput.init();
+
     $('input[name="publicationDate"]').daterangepicker({
         autoApply: true,
         drops: 'down',
