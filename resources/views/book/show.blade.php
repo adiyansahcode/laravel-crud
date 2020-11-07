@@ -24,7 +24,6 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-sm-4">
-                            <h3 class="d-inline-block d-sm-none">LOWA Men’s Renegade GTX Mid Hiking Boots Review</h3>
                             <div class="col-12">
                                 @if($book->bookImg->first() !== null)
                                     <img src="{{ asset('storage/images/' . $book->bookImg->first()->name) }}" class="product-image" alt="{{ $book->bookImg->first()->description }}">

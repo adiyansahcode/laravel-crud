@@ -257,7 +257,8 @@ return [
                 ],
                 [
                     'text' => 'Publisher',
-                    'url'  => '#',
+                    'route'  => 'publisher.index',
+                    'active' => ['publisher', 'publisher/*']
                 ],
             ],
         ],

@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/home', 'HomeController@index')->name('home.index');
 Route::redirect('/', '/home');
 
-Route::resources([
-    'book' => 'BookController',
-]);
+Route::resources(
+    [
+        'book' => 'BookController',
+        'publisher' => 'PublisherController',
+    ]
+);
 
 Route::get('/book/author/select', 'BookController@authorSelectData')->name('author.select');
 Route::get('/book/publisher/select', 'BookController@publisherSelectData')->name('publisher.select');
