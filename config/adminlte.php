@@ -249,7 +249,8 @@ return [
                 ],
                 [
                     'text' => 'Category',
-                    'url'  => '#',
+                    'route'  => 'category.index',
+                    'active' => ['category', 'category/*']
                 ],
                 [
                     'text' => 'Author',

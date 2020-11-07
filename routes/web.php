@@ -22,6 +22,7 @@ Route::resources(
     [
         'author' => 'AuthorController',
         'book' => 'BookController',
+        'category' => 'CategoryController',
         'publisher' => 'PublisherController',
     ]
 );
