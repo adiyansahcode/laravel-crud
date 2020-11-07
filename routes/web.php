@@ -20,6 +20,7 @@ Route::redirect('/', '/home');
 
 Route::resources(
     [
+        'author' => 'AuthorController',
         'book' => 'BookController',
         'publisher' => 'PublisherController',
     ]

@@ -253,7 +253,8 @@ return [
                 ],
                 [
                     'text' => 'Author',
-                    'url'  => '#',
+                    'route'  => 'author.index',
+                    'active' => ['author', 'author/*']
                 ],
                 [
                     'text' => 'Publisher',

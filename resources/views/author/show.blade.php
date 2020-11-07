@@ -5,12 +5,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Publisher</h1>
+          <h1>Author</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item">Book Settings</li>
-                <li class="breadcrumb-item">Publisher</li>
+                <li class="breadcrumb-item">Author</li>
                 <li class="breadcrumb-item active">View</li>
             </ol>
         </div>
@@ -27,15 +27,11 @@
                         <tbody>
                             <tr>
                                 <td>Name</td>
-                                <td>{{ $publisher->name }}</td>
+                                <td>{{ $author->name }}</td>
                             </tr>
                             <tr>
                                 <td>Description</td>
-                                <td>{{ $publisher->description }}</td>
-                            </tr>
-                            <tr>
-                                <td>City</td>
-                                <td>{{ $publisher->city }}</td>
+                                <td>{{ $author->description }}</td>
                             </tr>
                         </tbody>
                     </table>
